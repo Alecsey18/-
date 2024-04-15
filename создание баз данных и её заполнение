@@ -1,0 +1,49 @@
+import sqlite3
+conn = sqlite3.connect('data.db')
+cursor = conn.cursor()
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        age INTEGER,
+        email TEXT
+    )
+''')
+def add_user():
+    name = input("Введите имя пользователя: ")
+    age = int(input("Введите возраст пользователя: "))
+    email = input("Введите email пользователя: ")
+    cursor.execute("INSERT INTO users (name, age, email) VALUES (?, ?, ?)", (name, age, email))
+    conn.commit()
+    print("Пользователь успешно добавлен!")
+def get_users():
+    # Получение всех пользователей из таблицы
+    cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+    for user in users:
+        print(f"ID: {user[0]}, Имя: {user[1]}, Возраст: {user[2]}, Email: {user[3]}")
+
+def delete_user():
+            user_id = int(input("Введите ID пользователя, которого нужно удалить: "))
+            cursor.execute("DELETE FROM users WHERE id=?", (user_id,))
+            conn.commit()
+            print("Пользователь успешно удален!")
+while True:
+    print("\nМеню:")
+    print("1. Добавить пользователя")
+    print("2. Вывести список пользователей")
+    print("3. Удалить пользователя")
+    print("4. Выйти")
+    choice = int(input("Выберите пункт меню: "))
+    if choice == 1:
+        add_user()
+    elif choice == 2:
+        get_users()
+    elif choice == 3:
+        delete_user()
+    elif choice == 4:
+        conn.close()
+        print("Программа завершена.")
+        break
+    else:
+        print("Некорректный выбор, попробуйте снова.")
