@@ -1,0 +1,7 @@
+total_numbers = int(input("Всего чисел будет: "))
+numbers_list = []
+for i in range(total_numbers):
+    number = int(input())
+    numbers_list.append(number)
+result = list(filter(lambda x: x % 3 == 0 and x % 5 == 0, numbers_list))
+print(result)
